@@ -178,26 +178,3 @@ class Manager:
 
 
 Manager()
-#shelve docs https://docs.python.org/3/library/shelve.html
-#passlib docs https://passlib.readthedocs.io/en/stable/
-#TODO
-# make sure to delete items from shelve dict when item is deleteed from treeview, finish the remember function, what is argon2
-'''
-import shelve
-from passlib.hash import pbkdf2_sha256
-
-# Hash a password
-password = "mypassword"
-hashed_password = pbkdf2_sha256.hash(password)
-
-# Save the hashed password to a shelve file
-with shelve.open('passwords') as s:
-    s['user1'] = hashed_password
-
-# Verify a password
-with shelve.open('passwords') as s:
-    if pbkdf2_sha256.verify(password, s['user1']):
-        print("The password is correct.")
-    else:
-        print("The password is incorrect.")
-'''
