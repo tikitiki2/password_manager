@@ -166,9 +166,11 @@ class Manager:
         self.expando_frame = tk.Frame(self.root)
         self.button = tk.Button(self.root, text='add new', font=('arial', 18), command=self.add_new)
         self.delete_button=tk.Button(self.root,text='delete selected items',font=('arial',18),command=self.delete)
+        self.copy=tk.Button(self.root,text='copy selected',font=('arial',18),command=self.copy_password)
         self.delete_button.grid(row=0,column=0)
         self.root.grid_rowconfigure(2, weight=1)
         self.button.grid(row=1, column=0)
+        self.copy.grid(row=2,column=0)
         self.expando_frame.grid(row=2, sticky="nsew")
 
         self.root.grid_columnconfigure(0, weight=1)  # allow the listbox to take up extra space
@@ -191,6 +193,18 @@ class Manager:
                 username, password = data[app_name]
                 self.treeview.insert("", "end", values=(app_name, username, password))
         data.close()
+     def copy_password(self):
+        selected_item = self.treeview.selection()
+
+        if selected_item:
+            values = self.treeview.item(selected_item[0])["values"]
+            if len(values) > 2:
+                self.root.clipboard_clear()
+                self.root.clipboard_append(values[2])
+            else:
+                messagebox.showerror("Error", "Password not found for this item.")
+        else:
+            messagebox.showerror("Error", "No item selected.")
 
 
 Manager()
