@@ -7,10 +7,13 @@ class Manager:
     def __init__(self):
         self.root=tk.Tk()
         with sh.open('username_password.db') as s:
+            #check if created account if not create account else go to login page
             if not s:
+                #create account
                 self.create_account_GUI()
                 self.root.mainloop()
             else:
+                #login
                 self.root.title('password_manager')
                 self.creat_login_GUI()
 
@@ -27,6 +30,7 @@ class Manager:
                 h=s[self.login_username.get()]
                 verification = passlib.verify(self.login_password.get(), h)
             except:
+                #wrong username
                 messagebox.showwarning('incorrect username','username you entered is incorrect')
         s.close()
         if verification:
@@ -41,7 +45,7 @@ class Manager:
             i.grid_forget()
         self.create_main_GUI()
     def add_new(self):
-
+        #create 3 entry boxes asking for application username/email and password
         self.application_name=tk.Entry(self.expando_frame,width=25,font=('arial',17))
         self.username=tk.Entry(self.expando_frame,width=25,font=('arial',17))
         self.password=tk.Entry(self.expando_frame,width=25,font=('arial',17))
@@ -55,7 +59,7 @@ class Manager:
             val.grid(row=index+2,column=0)
 
 
-
+        
         self.password.bind('<Return>',self.hide)
     def hide(self,thing):
         #store user info to pass onto dictionary and hide textboxes
@@ -83,6 +87,7 @@ class Manager:
 
 
     def delete(self):
+        #delete from treeview
         with sh.open('data.db') as data:
 
             selected_items=self.treeview.selection()
@@ -95,6 +100,7 @@ class Manager:
 
 
     def creat_login_GUI(self):
+        #create the login gui then call authenticate method
         self.root.geometry('400x100')
         self.login_label=tk.Label(self.root,text='password:',font=('arial',15))
         self.login_label_user=tk.Label(self.root,text='username:',font=('arial',15))
@@ -112,6 +118,7 @@ class Manager:
 
         self.login_widgets=[self.login_label,self.login_label_user,self.login_password,self.login_username]
     def create_account_GUI(self):
+        #create an account call check method to make sure passwords match 
         self.root.geometry('500x200')
         self.login_label = tk.Label(self.root, text='password:', font=('arial', 15))
         self.login_label_confirm = tk.Label(self.root, text='confirm password:', font=('arial', 15))
@@ -136,9 +143,12 @@ class Manager:
         self.login_password_confirm.bind('<Return>',self.check)
 
     def forget_gui(self):
+        #clear gui
         for i in self.create_account_widgets:
             i.grid_forget()
     def check(self,thing):
+        #check if passwords match 
+        #if password match encrypt the password and store it in memory 
         if self.login_password.get() == self.login_password_confirm.get():
             hash=passlib.hash(self.login_password.get())
             with sh.open('username_password.db') as s:
@@ -147,9 +157,11 @@ class Manager:
             self.forget_gui()
             self.creat_login_GUI()
         else:
+            #passwords dont match try again
             messagebox.showwarning('showinfo','the passwords do not match try again')
 
     def create_main_GUI(self):
+        #create main gui 
         self.root.geometry('500x600')
         self.expando_frame = tk.Frame(self.root)
         self.button = tk.Button(self.root, text='add new', font=('arial', 18), command=self.add_new)
@@ -172,6 +184,7 @@ class Manager:
         self.remember()
 
     def remember(self):
+        #write data from memory to treeview
         with sh.open('data.db') as data:
             app_names = data.keys()
             for app_name in app_names:
