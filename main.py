@@ -9,14 +9,17 @@ class Manager:
         with sh.open('username_password.db') as s:
             if not s:
                 self.create_account_GUI()
+                self.root.mainloop()
+            else:
+                self.root.title('password_manager')
+                self.creat_login_GUI()
+
+                self.storage = {}
+
+                self.root.mainloop()
+
+
         s.close()
-        self.root.title('password_manager')
-        self.creat_login_GUI()
-
-
-        self.storage = {}
-
-        self.root.mainloop()
     def autheticate(self,attempt):
         #autheticate password
         with sh.open('username_password.db') as s:
