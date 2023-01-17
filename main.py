@@ -2,9 +2,12 @@ import tkinter as tk
 import shelve as sh
 from tkinter import ttk,messagebox
 from passlib.hash import pbkdf2_sha256 as passlib
+import os
 
 class Manager:
     def __init__(self):
+        self.salt = os.urandom(16)
+        self.key = None
         self.root=tk.Tk()
         with sh.open('username_password.db') as s:
             if not s:
@@ -203,3 +206,5 @@ class Manager:
                 messagebox.showerror("Error", "Password not found for this item.")
         else:
             messagebox.showerror("Error", "No item selected.")
+
+Manager()
